@@ -1,6 +1,7 @@
 from typing import List, Dict
-from llama_index.core import SummaryIndex, Settings
+from llama_index.core import SummaryIndex
 from llama_index.core.schema import BaseNode
+from src.generation.llm_backend import get_llm
 
 def generate_document_overview(nodes: List[BaseNode]) -> Dict[str, str]:
     """
@@ -9,10 +10,12 @@ def generate_document_overview(nodes: List[BaseNode]) -> Dict[str, str]:
     if not nodes:
         return {"summary": "暂无文档信息。", "questions": ""}
         
-    # 使用 SummaryIndex 处理长文档总结任务
+    # 使用统一 LLM 后端，避免 SummaryIndex 回退到默认 OpenAI completions 路径
     summary_index = SummaryIndex(nodes)
+    overview_llm = get_llm("weak")
     query_engine = summary_index.as_query_engine(
-        response_mode="tree_summarize"
+        response_mode="tree_summarize",
+        llm=overview_llm,
     )
     
     # 1. 生成摘要

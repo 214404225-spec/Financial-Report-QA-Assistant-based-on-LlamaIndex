@@ -23,6 +23,7 @@ from src.utils.config import GLOBAL_CONFIG
 from src.ingest.indexer import get_index
 from src.retrieval.retriever import get_retriever
 from src.generation.pipeline import QA_PROMPT_TEMPLATE
+from src.generation.llm_backend import init_llm
 
 def load_test_set(file_path: str | Path) -> list:
     """加载测试用例"""
@@ -45,10 +46,10 @@ def run_evaluation():
     print(f"⚖️ [Evaluation] 启动本地无情裁判: {judge_model_name}")
     
     # 2. 实例化裁判模型 (Judge LLM) 和裁判向量 (Judge Embedding)
-    # 这里我们使用强大的 72B 模型作为 Ragas 的裁判
-    judge_llm = Ollama(model=judge_model_name, base_url=base_url, request_timeout=600.0)
+    # 使用 DeepSeek API 作为裁判
+    judge_llm = init_llm(model_type="strong")
     judge_embedding = HuggingFaceEmbedding(model_name=embed_model_name, device=device)
-    
+
     # 将 LlamaIndex 的模型包装为 Ragas 可识别的格式
     ragas_llm = LlamaIndexLLMWrapper(judge_llm)
     ragas_emb = LlamaIndexEmbeddingsWrapper(judge_embedding)
@@ -57,15 +58,12 @@ def run_evaluation():
     print("⚙️ [Pipeline] 准备待测系统引擎...")
     index = get_index()
     retriever = get_retriever(index)
-    
-    # 使用基础生成模型 (如 7B) 作为答题选手
-    answer_llm = Ollama(
-        model=GLOBAL_CONFIG["llm"]["weak_model"], 
-        base_url=base_url, 
-        temperature=0.0
-    )
-    
+
+    # 使用基础生成模型 (DeepSeek API) 作为答题选手
+    answer_llm = init_llm(model_type="weak")
+
     # 构建 Query Engine
+
     query_engine = RetrieverQueryEngine.from_args(
         retriever,
         llm=answer_llm,

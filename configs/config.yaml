@@ -2,9 +2,11 @@
 # 本配置目前处于 Phase 1: Foundation MVP 状态
 
 llm:
-  strong_model: "qwen2.5:72b"          # Phase 1: 仅用于 RAGAS 评估裁判
-  weak_model: "qwen2.5:7b"             # Phase 1: 核心问答生成模型
-  ollama_base_url: "http://localhost:11434"
+  strong_model: "deepseek-chat"          # Phase 1: 仅用于 RAGAS 评估裁判
+  weak_model: "deepseek-chat"             # Phase 1: 核心问答生成模型
+  api_base: "https://api.deepseek.com/v1"
+  # graph / pipeline / retriever / indexer 等仍使用 LlamaIndex Ollama 客户端时需此项
+  ollama_base_url: "http://127.0.0.1:11434"
   temperature: 0.1                     # 极低温度，追求事实性，抑制金融幻觉
 
 embedding:
@@ -25,7 +27,7 @@ chunking:
 raptor:
   use_raptor: true                     # Phase 2 开启: 构建宏观摘要树
   max_levels: 3                        # 摘要树的层级 (叶子节点 -> L1 -> L2)
-  summary_model: "qwen2.5:7b"          # 使用 7B 小模型在后台高速刷摘要
+  summary_model: "deepseek-chat"          # 使用 7B 小模型在后台高速刷摘要
 
 retrieval:
   bm25_top_k: 20                       # Phase 2 开启: 词频检索召回数量
@@ -38,4 +40,4 @@ storage:
 
 evaluation:
   test_set_path: "./data/test_set.json"
-  judge_model: "qwen2.5:7b"           # 评估闭环的无情本地裁判
+  judge_model: "deepseek-chat"           # 评估闭环的无情本地裁判

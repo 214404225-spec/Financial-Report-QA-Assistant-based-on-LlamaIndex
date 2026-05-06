@@ -1,0 +1,154 @@
+/* Insight · 工作台 — 共享设计令牌（Claude 暖色 + 纸感） */
+:root {
+  /* —— 纸感背景层 —— */
+  --paper:        #f6f4ef;     /* 主背景 */
+  --paper-2:      #efece4;     /* 次背景 / 侧栏 */
+  --paper-3:      #e8e4d9;     /* 分隔区 / 选中底 */
+  --card:         #fbfaf6;     /* 卡片白 */
+  --card-elev:    #ffffff;     /* 浮起卡片 */
+
+  /* —— 墨色文字层 —— */
+  --ink:          #29261b;
+  --ink-2:        #4a463c;
+  --ink-3:        #6b6760;
+  --ink-4:        #94908a;
+  --ink-5:        #b8b4ad;
+
+  /* —— 边框 / 描线 —— */
+  --line:         #e0dccf;
+  --line-2:       #d4cfc2;
+  --line-strong:  #c8c2b3;
+
+  /* —— Claude 标志橙 + 衍生 —— */
+  --accent:       #d97757;
+  --accent-soft:  #e89878;
+  --accent-deep:  #c25e3e;
+  --accent-wash:  #f3dccf;     /* 高亮淡底 */
+  --accent-tint:  #faeee5;     /* 极淡底 */
+
+  /* —— 状态色（与暖色调和谐） —— */
+  --ok:           #5b8a55;
+  --warn:         #c89a3a;
+  --info:         #5a7ea8;
+
+  /* —— 字体 —— */
+  --font-sans: "PingFang SC", "Hiragino Sans GB", "Helvetica Neue", "Microsoft YaHei", system-ui, -apple-system, sans-serif;
+  --font-serif: "Source Han Serif SC", "Songti SC", "Noto Serif SC", Georgia, serif;
+  --font-mono: "JetBrains Mono", "SF Mono", ui-monospace, Menlo, monospace;
+
+  /* —— 圆角 —— */
+  --r-sm: 6px;
+  --r-md: 10px;
+  --r-lg: 14px;
+  --r-xl: 20px;
+
+  /* —— 阴影（极轻，纸感） —— */
+  --shadow-1: 0 1px 0 rgba(41,38,27,0.04), 0 1px 2px rgba(41,38,27,0.04);
+  --shadow-2: 0 2px 6px rgba(41,38,27,0.06), 0 8px 24px rgba(41,38,27,0.05);
+  --shadow-3: 0 8px 24px rgba(41,38,27,0.10), 0 24px 60px rgba(41,38,27,0.08);
+}
+
+/* 暗色主题（覆盖） */
+[data-theme="dark"] {
+  --paper:        #1c1b18;
+  --paper-2:      #232220;
+  --paper-3:      #2c2a26;
+  --card:         #25241f;
+  --card-elev:    #2e2d28;
+
+  --ink:          #f6f4ef;
+  --ink-2:        #d4d0c5;
+  --ink-3:        #a8a39a;
+  --ink-4:        #7d786f;
+  --ink-5:        #5a564f;
+
+  --line:         #353330;
+  --line-2:       #43403b;
+  --line-strong:  #555149;
+
+  --accent:       #e08664;
+  --accent-soft:  #c97050;
+  --accent-deep:  #f4a385;
+  --accent-wash:  #3a2820;
+  --accent-tint:  #2a201a;
+
+  --shadow-1: 0 1px 0 rgba(0,0,0,0.3), 0 1px 2px rgba(0,0,0,0.2);
+  --shadow-2: 0 2px 6px rgba(0,0,0,0.3), 0 8px 24px rgba(0,0,0,0.2);
+  --shadow-3: 0 8px 24px rgba(0,0,0,0.4), 0 24px 60px rgba(0,0,0,0.3);
+}
+
+/* —— 基础重置 —— */
+*, *::before, *::after { box-sizing: border-box; }
+html, body { margin: 0; padding: 0; }
+body {
+  font-family: var(--font-sans);
+  color: var(--ink);
+  background: var(--paper);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-feature-settings: "tnum" 1, "ss01" 1;
+}
+button { font: inherit; color: inherit; }
+input, textarea { font: inherit; color: inherit; }
+
+/* —— 共用：自定义滚动条 —— */
+.scroll-fine::-webkit-scrollbar { width: 8px; height: 8px; }
+.scroll-fine::-webkit-scrollbar-thumb {
+  background: var(--line-2);
+  border-radius: 8px;
+  border: 2px solid transparent;
+  background-clip: padding-box;
+}
+.scroll-fine::-webkit-scrollbar-thumb:hover { background: var(--line-strong); background-clip: padding-box; border: 2px solid transparent; }
+.scroll-fine::-webkit-scrollbar-track { background: transparent; }
+
+/* —— 工具：纸纹 —— */
+.paper-grain {
+  background-image:
+    radial-gradient(rgba(41,38,27,0.025) 1px, transparent 1.2px);
+  background-size: 4px 4px;
+}
+
+/* —— 通用：徽章 —— */
+.tag {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 11px; font-weight: 500;
+  padding: 2px 8px; border-radius: 999px;
+  background: var(--paper-3); color: var(--ink-2);
+  border: 1px solid var(--line);
+}
+.tag-accent { background: var(--accent-tint); color: var(--accent-deep); border-color: var(--accent-wash); }
+[data-theme="dark"] .tag-accent { color: var(--accent-deep); }
+
+/* —— 按钮基础 —— */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 8px 14px; border-radius: var(--r-md);
+  border: 1px solid var(--line-2); background: var(--card);
+  color: var(--ink); font-size: 13px; font-weight: 500;
+  cursor: pointer; transition: all .15s ease;
+  white-space: nowrap;
+}
+.btn:hover { background: var(--paper-3); border-color: var(--line-strong); }
+.btn-primary {
+  background: var(--accent); color: #fff; border-color: var(--accent);
+}
+.btn-primary:hover { background: var(--accent-deep); border-color: var(--accent-deep); }
+.btn-ghost { background: transparent; border-color: transparent; }
+.btn-ghost:hover { background: var(--paper-3); }
+.btn-sm { padding: 5px 10px; font-size: 12px; border-radius: 8px; }
+.btn-icon { padding: 6px; width: 30px; height: 30px; }
+
+/* —— 输入 —— */
+.field {
+  width: 100%;
+  background: var(--card);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-md);
+  padding: 10px 12px;
+  font-size: 13px; color: var(--ink);
+  transition: border-color .15s, box-shadow .15s;
+  resize: none;
+}
+.field:focus { outline: none; border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
+.field::placeholder { color: var(--ink-4); }

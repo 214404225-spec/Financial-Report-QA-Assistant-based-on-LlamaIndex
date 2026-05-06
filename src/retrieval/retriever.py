@@ -5,10 +5,11 @@ from llama_index.core.retrievers import BaseRetriever, QueryFusionRetriever
 from llama_index.retrievers.bm25 import BM25Retriever
 from llama_index.core.schema import NodeWithScore, BaseNode, Document
 from llama_index.core.postprocessor import SentenceTransformerRerank
-from llama_index.llms.ollama import Ollama
 
 # 导入全局配置
 from src.utils.config import GLOBAL_CONFIG
+# 复用统一的 LLM 工厂（自动按 .env / config.yaml 选 DeepSeek 或 Ollama）
+from src.generation.llm_backend import get_llm
 
 # ==========================================
 # 全局单例缓存区 (Singleton Cache)
@@ -67,18 +68,14 @@ def get_hybrid_retriever(index: VectorStoreIndex) -> BaseRetriever:
         pass # 直接复用内存中的 _CACHED_BM25_RETRIEVER，耗时 0 毫秒
     
     # 3. 融合两路召回 (RRF)
+    # num_queries=1 时 QueryFusionRetriever 不会真正调用 LLM 改写查询，
+    # 但底层仍要求传入一个有效的 llm 对象用于其他兜底路径——直接复用工厂。
     fusion_retriever = QueryFusionRetriever(
         retrievers=[vector_retriever, _CACHED_BM25_RETRIEVER],
         similarity_top_k=GLOBAL_CONFIG["retrieval"].get("vector_top_k", 20),
         num_queries=1,
         mode="reciprocal_rerank",
-        # 显式注入本地 LLM，避免 QueryFusionRetriever 回退到 OpenAI 默认配置
-        llm=Ollama(
-            model=GLOBAL_CONFIG["llm"]["weak_model"],
-            base_url=GLOBAL_CONFIG["llm"]["ollama_base_url"],
-            temperature=0.0,
-            request_timeout=300.0,
-        ),
+        llm=get_llm("weak"),
     )
     
     return fusion_retriever

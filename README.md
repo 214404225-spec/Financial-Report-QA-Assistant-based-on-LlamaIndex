@@ -4,13 +4,13 @@
 ![Hardware](https://img.shields.io/badge/Hardware-Apple_Silicon_MPS-white.svg)
 ![Dependencies](https://img.shields.io/badge/Framework-LlamaIndex_v0.10+-purple.svg)
 
-> **Insight** 旨在构建一个对标 Google NotebookLM 体验的金融研报 RAG 工作台。该系统完全离线部署于 Apple Mac Studio (M3 Ultra) 架构，利用 512GB 统一内存无缝支撑 `Qwen2.5-72B` 与高级检索管线的端到端运行，实现**零核心大模型 API 推理成本**与极致的数据隐私安全。
+> **Insight** 旨在构建一个对标 Google NotebookLM 体验的金融研报 RAG 工作台。该系统完全离线部署于 Apple Mac Studio (M3 Ultra) 架构，利用 512GB 统一内存无缝支撑 `Qwen2.5-72B` 与高级检索管线的端到端运行，实现**极致的大模型推理质量**与极致的数据隐私安全。
 
 ---
 
 ## ✨ 核心特性 (Key Features)
 
-- 🔒 **100% 本地化 (Local-First)**：推理（7B/72B）、向量化 (BGE-M3)、精排 (BGE-Reranker) 均基于 MPS 硬件加速在本地完成。
+- ☁️ **混合云架构 (Hybrid-Cloud)**：LLM 推理 (DeepSeek API)、向量化 (BGE-M3)、精排 (BGE-Reranker) 均基于 MPS 硬件加速在本地完成。
 - ✂️ **自适应语义分块 (Semantic Chunking)**：抛弃生硬的字数截断，依据句间余弦相似度（95% 阈值）进行自适应切分，保持财务逻辑连贯。
 - 🌲 **宏观树状摘要 (RAPTOR)**：集成 `RaptorPack`，后台调用 7B 模型递归构建知识树，完美解答跨研报的宏观总结类提问。
 - 🤝 **倒数秩融合混合检索 (Hybrid Search)**：在内存中重构 BM25 词频矩阵，与 ChromaDB 稠密向量双路召回后执行 RRF 融合，大幅降低数字型实体的漏召回率。
@@ -41,8 +41,8 @@ graph LR
     J --> L[bge-reranker Fine-grained Reranking]
     K --> L
     
-    L -->|Top 5 Context| M(Qwen2.5-7B Chat Engine)
-    M --> N[Precise Answer with Physical Page Numbers]
+    L -->|Top 5 Context| M(DeepSeek-V3/Chat (API))
+    M --> N[带物理页码的精准回答]
 ```
 
 ---
@@ -56,6 +56,7 @@ graph LR
 - 📄 **[API 契约与数据流转](docs/01_architecture_data_flow.md)**：定义了严格的 `source` 与 `page_label` 溯源元数据契约。
 - ⚖️ **[评估与消融实验指标](docs/02_evaluation_metrics.md)**：定义了 20 题标准化测试集与内存-性能权衡分析方法论。
 - 📝 **[技术债与重构日志](docs/04_technical_debt_log.md)**：记录了当前系统的性能瓶颈与未来重构计划（如 ChromaDB 耦合）。
+- 🖥️ **[前端功能与接入说明](docs/10_frontend_spec_for_integration.md)**：当前 Gradio 功能清单、控件变量名与 Python 逻辑接口名，便于外部 UI 设计或 `gradio_client` 对接。
 
 ---
 
@@ -69,7 +70,8 @@ graph LR
 source .venv/bin/activate
 pip install -r requirements.txt
 
-# 确保本地 Ollama 服务已启动，并拥有以下模型：
+# 配置环境变量：
+在 `.env` 中填入 `DEEPSEEK_API_KEY`。系统依然要求本地具备以下 Embedding/Reranker 模型环境：
 ollama pull qwen2.5:72b
 ollama pull qwen2.5:7b
 ```
