@@ -25,20 +25,20 @@
 
 ```mermaid
 graph LR
-    A[PDF 研报] --> B(PyMuPDF 提取+页码注入)
-    B --> C{自适应分块}
-    C -->|Phase 1| D[固定 256 Token]
-    C -->|Phase 2A| E[BGE-M3 语义分块]
+    A[PDF Financial Report] --> B(PyMuPDF Extraction + Page Number Injection)
+    B --> C{Adaptive Chunking}
+    C -->|Phase 1| D[Fixed 256 Tokens]
+    C -->|Phase 2A| E[BGE-M3 Semantic Chunking]
     
     D --> F[(ChromaDB)]
     E --> F
-    E -.->|RAPTOR| G[后台 7B 宏观摘要树] -.-> F
+    E -.->|RAPTOR| G[Background 7B Macro Summary Tree] -.-> F
     
-    H[用户提问] --> I{检索策略}
-    I -->|Phase 1| J[单路向量检索]
-    I -->|Phase 2A| K[BM25 + Vector 双路 RRF 融合]
+    H[User Query] --> I{Retrieval Strategy}
+    I -->|Phase 1| J[Single-path Vector Retrieval]
+    I -->|Phase 2A| K[BM25 + Vector Dual-path RRF Fusion]
     
-    J --> L[bge-reranker 精排]
+    J --> L[bge-reranker Fine-grained Reranking]
     K --> L
     
     L -->|Top 5 Context| M(DeepSeek-V3/Chat (API))
