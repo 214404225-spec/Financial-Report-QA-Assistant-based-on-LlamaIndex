@@ -1,34 +1,75 @@
-# 核心框架 (固定到已验证可用版本，避免模块兼容冲突)
-llama-index-core==0.12.52.post1
+# ===================================================================
+# Python version requirement
+# Recommended: Python 3.11.x
+# Supported:   Python >=3.10,<3.13
+# ===================================================================
 
-# LLM 与 嵌入模型本地运行支持
-llama-index-llms-ollama==0.6.2
-llama-index-embeddings-huggingface==0.5.5
+# ------------------------
+# Core framework (LlamaIndex v0.10+)
+# ------------------------
+llama-index-core>=0.10.0
+llama-index-llms-ollama>=0.1.0
+llama-index-embeddings-huggingface>=0.1.0
+llama-index-vector-stores-chroma>=0.1.0
+llama-index-readers-file>=0.1.0
+llama-index-retrievers-bm25>=0.1.0
+llama-index-packs-raptor>=0.1.0
 
-# 向量数据库
-chromadb
-llama-index-vector-stores-chroma==0.4.1
+# ------------------------
+# Vector database
+# ------------------------
+chromadb>=0.5.0
 
-# PDF 解析器 (支持双栏、高保真物理页码提取)
-pymupdf
-llama-index-readers-file==0.4.11
+# ------------------------
+# PDF parsing
+# ------------------------
+pymupdf>=1.23.0
 
-# 检索增强 (精排 Reranker)
-llama-index-postprocessor-flag-embedding-reranker==0.3.0
-llama-index-retrievers-bm25==0.5.0
+# ------------------------
+# Retrieval reranking
+# ------------------------
+sentence-transformers>=2.2.0
 
-# RAPTOR 树状摘要 (Phase 2 使用)
-llama-index-packs-raptor==0.3.4
+# ------------------------
+# Evaluation
+# ------------------------
+ragas>=0.2.0
+datasets>=2.14.0
+pandas>=2.0.0
 
-# 本地无情裁判与评估框架
-ragas==0.4.3
+# ------------------------
+# Web UI
+# ------------------------
+gradio>=4.0.0
 
-# 沉浸式交互前端 (Phase 2 使用)
-gradio
+# ------------------------
+# Optional external data (Phase 2/P3)
+# ------------------------
+yfinance>=0.2.40
 
-# 自主代理外部数据源 (Phase 2 使用)
-yfinance
+# ------------------------
+# Utilities
+# ------------------------
+pyyaml>=6.0.0
+pydantic>=2.0.0
 
-# 辅助工具
-pyyaml
-pydantic
+# ------------------------
+# LangGraph & Observability
+# ------------------------
+langgraph>=0.0.30
+langfuse>=2.20.0
+
+# ------------------------
+# Proxy Layer
+# ------------------------
+fastapi>=0.100.0
+uvicorn>=0.23.0
+sse-starlette>=1.6.0
+httpx>=0.24.0
+python-multipart>=0.0.6
+
+# ------------------------
+# DeepSeek API (OpenAI Compatible)
+# ------------------------
+llama-index-llms-openai>=0.1.0
+python-dotenv>=1.0.0

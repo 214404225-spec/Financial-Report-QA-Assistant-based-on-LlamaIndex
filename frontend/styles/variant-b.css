@@ -1,0 +1,546 @@
+/* —— 方案 B · 平衡版 · 卡片化 —— */
+.vb-app {
+  display: grid;
+  grid-template-columns: 320px 1fr 460px;
+  height: 100%; width: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 13px;
+  overflow: hidden;
+  font-family: var(--font-sans);
+}
+.vb-topbar {
+  grid-column: 1/-1;
+  height: 56px;
+  display: flex; align-items: center;
+  padding: 0 20px;
+  gap: 14px;
+  background: var(--paper);
+  border-bottom: 1px solid var(--line);
+}
+.vb-brand { display: flex; align-items: center; gap: 10px; }
+.vb-logo {
+  width: 30px; height: 30px;
+  border-radius: 9px;
+  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+  color: #fff; font-family: var(--font-serif); font-weight: 700;
+  font-size: 16px;
+  display: flex; align-items: center; justify-content: center;
+  box-shadow: 0 2px 6px rgba(217,119,87,0.3);
+}
+.vb-brand-text { display: flex; flex-direction: column; line-height: 1.15; }
+.vb-brand-name { font-weight: 600; font-size: 14.5px; }
+.vb-brand-sub { font-size: 11px; color: var(--ink-3); }
+.vb-nav { display: flex; gap: 4px; margin-left: 16px; }
+.vb-nav button {
+  border: 0; background: transparent;
+  padding: 6px 12px; border-radius: 8px;
+  font-size: 12.5px; color: var(--ink-2); cursor: pointer;
+}
+.vb-nav button.active { background: var(--paper-3); color: var(--ink); font-weight: 500; }
+.vb-search {
+  flex: 1; max-width: 360px;
+  display: flex; align-items: center; gap: 6px;
+  background: var(--paper-2); border: 1px solid var(--line);
+  border-radius: 8px; padding: 6px 10px;
+  font-size: 12px; color: var(--ink-3);
+  margin-left: 16px;
+}
+.vb-search input { border: 0; background: transparent; outline: none; flex: 1; font-size: 12.5px; color: var(--ink); }
+.vb-topbar-spacer { flex: 1; }
+.vb-avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  background: var(--paper-3); display: flex; align-items: center; justify-content: center;
+  font-size: 12px; font-weight: 600; color: var(--ink-2);
+  cursor: pointer;
+}
+
+.vb-body {
+  grid-column: 1/-1;
+  display: grid;
+  grid-template-columns: 320px 1fr 460px;
+  height: calc(100% - 56px);
+  min-height: 0;
+}
+
+/* —— 左：来源卡片 —— */
+.vb-left {
+  display: flex; flex-direction: column;
+  background: var(--paper-2);
+  border-right: 1px solid var(--line);
+  min-height: 0;
+}
+.vb-left-head {
+  padding: 14px 18px 10px;
+  display: flex; align-items: center; gap: 8px;
+}
+.vb-left-title { font-size: 13.5px; font-weight: 600; }
+.vb-left-count { font-size: 11px; color: var(--ink-3); }
+.vb-add-btn {
+  margin-left: auto;
+  width: 26px; height: 26px;
+  border-radius: 8px; border: 1px solid var(--line);
+  background: var(--card);
+  cursor: pointer; color: var(--ink-2);
+  display: flex; align-items: center; justify-content: center;
+}
+.vb-add-btn:hover { background: var(--accent-tint); color: var(--accent-deep); border-color: var(--accent-soft); }
+
+.vb-source-actions {
+  display: flex; gap: 6px; padding: 0 18px 10px;
+  font-size: 11px;
+}
+.vb-source-actions span {
+  color: var(--ink-3); cursor: pointer;
+  padding: 3px 8px; border-radius: 6px;
+}
+.vb-source-actions span:hover { background: var(--paper-3); color: var(--ink); }
+
+.vb-source-list {
+  flex: 1; overflow-y: auto;
+  padding: 0 12px 12px;
+  display: flex; flex-direction: column; gap: 8px;
+  min-height: 0;
+}
+.vb-source {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px;
+  cursor: pointer;
+  position: relative;
+  transition: all .15s;
+}
+.vb-source:hover { border-color: var(--line-strong); box-shadow: var(--shadow-1); }
+.vb-source.checked { border-color: var(--accent-soft); background: var(--accent-tint); }
+.vb-source-head { display: flex; gap: 10px; align-items: flex-start; }
+.vb-source-icon {
+  flex: 0 0 auto; width: 32px; height: 36px;
+  background: linear-gradient(180deg, #fff, #f3efe5);
+  border: 1px solid var(--line);
+  border-radius: 4px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-weight: 700; color: var(--accent-deep);
+  font-family: var(--font-mono);
+  position: relative;
+  box-shadow: 1px 1px 0 var(--line);
+}
+.vb-source-icon::before {
+  content: ''; position: absolute; top: 0; right: 0;
+  width: 8px; height: 8px;
+  background: linear-gradient(135deg, transparent 50%, var(--line) 50%);
+}
+[data-theme="dark"] .vb-source-icon { background: linear-gradient(180deg, #3a3833, #2c2a26); color: var(--accent-deep); }
+.vb-source-body { flex: 1; min-width: 0; }
+.vb-source-title {
+  font-size: 13px; font-weight: 500; color: var(--ink);
+  line-height: 1.4;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.vb-source-meta { font-size: 11px; color: var(--ink-3); margin-top: 4px; }
+.vb-source-foot {
+  display: flex; justify-content: space-between; align-items: center;
+  margin-top: 10px;
+  font-size: 11px; color: var(--ink-3);
+}
+.vb-source-check {
+  width: 18px; height: 18px;
+  border: 1.5px solid var(--line-strong);
+  border-radius: 5px; background: var(--paper-2);
+  display: flex; align-items: center; justify-content: center;
+  position: relative; flex: 0 0 auto;
+}
+.vb-source.checked .vb-source-check {
+  background: var(--accent); border-color: var(--accent);
+}
+.vb-source.checked .vb-source-check::after {
+  content: ''; width: 4px; height: 8px;
+  border-right: 2px solid #fff; border-bottom: 2px solid #fff;
+  transform: rotate(45deg) translate(0, -1px);
+}
+
+.vb-pref {
+  margin: 6px 12px 12px;
+  padding: 12px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+}
+.vb-pref-title {
+  font-size: 11px; font-weight: 600;
+  color: var(--ink-3); letter-spacing: 0.06em; text-transform: uppercase;
+  margin-bottom: 6px; display: flex; align-items: center; gap: 6px;
+}
+.vb-pref-text {
+  font-size: 12px; line-height: 1.6; color: var(--ink-2);
+  font-style: italic;
+  position: relative; padding-left: 10px;
+  border-left: 2px solid var(--accent-soft);
+}
+
+/* —— 中：对话 —— */
+.vb-center {
+  display: flex; flex-direction: column;
+  min-height: 0;
+  position: relative;
+}
+.vb-center-head {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 28px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+.vb-engine-pill {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 5px 12px 5px 8px;
+  background: var(--paper-3); border-radius: 999px;
+  font-size: 12px; cursor: pointer;
+}
+.vb-engine-pill .dot {
+  width: 8px; height: 8px; border-radius: 50%;
+  background: var(--ok);
+  box-shadow: 0 0 0 3px rgba(91,138,85,0.18);
+}
+.vb-engine-pill.agent .dot { background: var(--info); box-shadow: 0 0 0 3px rgba(90,126,168,0.18); }
+
+.vb-summary-card {
+  margin: 16px 28px 0;
+  padding: 18px 22px;
+  background:
+    linear-gradient(135deg, var(--accent-tint), transparent 60%),
+    var(--card);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+}
+.vb-summary-card::after {
+  content: '”'; position: absolute;
+  font-family: var(--font-serif);
+  font-size: 100px; line-height: 1;
+  color: var(--accent-soft); opacity: 0.18;
+  right: 12px; top: 12px;
+  pointer-events: none;
+}
+.vb-summary-eyebrow {
+  font-size: 11px; font-weight: 600;
+  color: var(--accent-deep); letter-spacing: 0.1em; text-transform: uppercase;
+  margin-bottom: 4px;
+}
+.vb-summary-h {
+  font-family: var(--font-serif);
+  font-size: 18px; font-weight: 600;
+  color: var(--ink); margin: 0 0 10px;
+}
+.vb-summary-text {
+  font-size: 13.5px; line-height: 1.75; color: var(--ink-2);
+  max-width: 720px;
+}
+.vb-explore { margin-top: 14px; }
+.vb-explore-label { font-size: 11px; color: var(--ink-3); margin-bottom: 6px; }
+.vb-explore-chips {
+  display: flex; flex-wrap: wrap; gap: 6px;
+}
+.vb-explore-chip {
+  padding: 7px 12px;
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: 999px; font-size: 12px; cursor: pointer;
+  transition: all .15s;
+  color: var(--ink-2);
+  display: inline-flex; align-items: center; gap: 5px;
+}
+.vb-explore-chip::before {
+  content: '✦'; color: var(--accent); font-size: 10px;
+}
+.vb-explore-chip:hover {
+  background: var(--accent); color: #fff; border-color: var(--accent);
+}
+.vb-explore-chip:hover::before { color: #fff; }
+
+.vb-chat {
+  flex: 1; overflow-y: auto;
+  padding: 16px 28px 12px;
+  min-height: 0;
+}
+.vb-msg {
+  display: flex; gap: 12px;
+  margin-bottom: 22px;
+  max-width: 800px;
+}
+.vb-msg.user { flex-direction: row-reverse; margin-left: auto; }
+.vb-msg-avatar {
+  width: 30px; height: 30px;
+  border-radius: 9px;
+  display: flex; align-items: center; justify-content: center;
+  flex: 0 0 auto;
+  font-size: 12px; font-weight: 600;
+}
+.vb-msg.user .vb-msg-avatar { background: var(--paper-3); color: var(--ink-2); }
+.vb-msg.assistant .vb-msg-avatar {
+  background: linear-gradient(135deg, var(--accent), var(--accent-deep));
+  color: #fff;
+  font-family: var(--font-serif);
+}
+.vb-msg-body { flex: 1; min-width: 0; }
+.vb-msg-name { font-size: 11px; color: var(--ink-3); margin-bottom: 4px; font-weight: 500; }
+.vb-msg.user .vb-msg-name { text-align: right; }
+.vb-msg-bubble {
+  padding: 14px 18px;
+  border-radius: 16px;
+  font-size: 13.5px; line-height: 1.75;
+  white-space: pre-wrap;
+}
+.vb-msg.user .vb-msg-bubble {
+  background: var(--ink); color: var(--paper);
+  border-radius: 16px 16px 4px 16px;
+  display: inline-block;
+}
+[data-theme="dark"] .vb-msg.user .vb-msg-bubble { background: var(--paper-3); color: var(--ink); }
+.vb-msg.assistant .vb-msg-bubble {
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: 4px 16px 16px 16px;
+}
+.vb-cite-inline {
+  display: inline-flex; align-items: center;
+  height: 16px; padding: 0 5px;
+  background: var(--accent-tint); color: var(--accent-deep);
+  border-radius: 4px; font-size: 10px; font-weight: 600;
+  font-family: var(--font-mono); cursor: pointer;
+  vertical-align: 1px; margin: 0 1px;
+}
+.vb-cite-inline:hover { background: var(--accent-wash); }
+.vb-cite-inline.active { background: var(--accent); color: #fff; }
+
+.vb-cite-cards {
+  display: flex; gap: 8px; flex-wrap: wrap;
+  margin-top: 10px;
+}
+.vb-cite-card {
+  flex: 1 1 240px; min-width: 0; max-width: 320px;
+  padding: 10px 12px;
+  background: var(--paper-2);
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  cursor: pointer;
+  transition: all .15s;
+}
+.vb-cite-card:hover { border-color: var(--accent-soft); background: var(--accent-tint); }
+.vb-cite-card.active { border-color: var(--accent); background: var(--accent-tint); }
+.vb-cite-card-head {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 11px; color: var(--ink-3);
+  margin-bottom: 4px;
+}
+.vb-cite-card-num {
+  width: 16px; height: 16px;
+  background: var(--accent-tint); color: var(--accent-deep);
+  border-radius: 4px; font-size: 10px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono);
+}
+.vb-cite-card-source {
+  font-size: 11px; color: var(--ink-2); font-weight: 500;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  flex: 1;
+}
+.vb-cite-card-page { font-size: 10px; color: var(--accent-deep); font-family: var(--font-mono); }
+.vb-cite-card-snip {
+  font-size: 11.5px; line-height: 1.5; color: var(--ink-2);
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+
+.vb-msg-actions {
+  display: flex; gap: 2px; margin-top: 8px;
+}
+.vb-msg-actions button {
+  border: 0; background: transparent;
+  padding: 5px 8px; border-radius: 7px;
+  font-size: 11.5px; color: var(--ink-3); cursor: pointer;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.vb-msg-actions button:hover { background: var(--paper-3); color: var(--ink); }
+
+.vb-typing::after {
+  content: '▍'; color: var(--accent);
+  animation: vb-blink 1s steps(2) infinite;
+  margin-left: 2px;
+}
+@keyframes vb-blink { 50% { opacity: 0; } }
+
+.vb-composer {
+  padding: 14px 28px 18px;
+  border-top: 1px solid var(--line);
+  background: var(--paper);
+}
+.vb-composer-shell {
+  background: var(--card);
+  border: 1px solid var(--line-2);
+  border-radius: 18px;
+  padding: 10px 12px 8px 16px;
+  transition: all .15s;
+}
+.vb-composer-shell:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
+.vb-composer-row { display: flex; align-items: flex-end; gap: 8px; }
+.vb-composer-input {
+  flex: 1; border: 0; background: transparent;
+  resize: none; outline: none;
+  font-size: 13.5px; line-height: 1.6;
+  color: var(--ink);
+  padding: 4px 0;
+  max-height: 140px;
+}
+.vb-composer-input::placeholder { color: var(--ink-4); }
+.vb-send-btn {
+  width: 34px; height: 34px;
+  border-radius: 10px;
+  border: 0; background: var(--accent);
+  color: #fff; font-size: 16px; cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+}
+.vb-send-btn:hover { background: var(--accent-deep); }
+.vb-composer-tools {
+  display: flex; gap: 4px; margin-top: 4px; align-items: center;
+  font-size: 11px; color: var(--ink-3);
+}
+.vb-composer-tool {
+  padding: 4px 8px; border-radius: 7px; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.vb-composer-tool:hover { background: var(--paper-3); color: var(--ink); }
+
+/* 跨文档对比矩阵 — 浮动卡片 */
+.vb-matrix-card {
+  margin: 0 28px 16px;
+  padding: 16px 20px;
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: 14px;
+}
+.vb-matrix-head {
+  display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
+}
+.vb-matrix-title { font-weight: 600; font-size: 13.5px; }
+.vb-matrix-table {
+  width: 100%; border-collapse: collapse;
+  font-size: 12px;
+}
+.vb-matrix-table th, .vb-matrix-table td {
+  padding: 9px 10px; text-align: left;
+  border-bottom: 1px solid var(--line);
+  vertical-align: top;
+}
+.vb-matrix-table th {
+  font-weight: 600; color: var(--ink-3);
+  font-size: 11px; text-transform: uppercase; letter-spacing: 0.04em;
+  background: var(--paper-2);
+}
+.vb-matrix-table td:first-child { font-weight: 500; color: var(--ink); }
+.vb-matrix-table tr:last-child td { border-bottom: 0; }
+
+/* —— 右：PDF —— */
+.vb-right {
+  display: flex; flex-direction: column;
+  background: var(--paper-2);
+  border-left: 1px solid var(--line);
+  min-height: 0;
+}
+.vb-pdf-head {
+  padding: 12px 16px;
+  border-bottom: 1px solid var(--line);
+  display: flex; flex-direction: column; gap: 8px;
+}
+.vb-pdf-eyebrow { font-size: 10px; color: var(--ink-4); letter-spacing: 0.1em; text-transform: uppercase; }
+.vb-pdf-doc-title { font-size: 13.5px; font-weight: 500; line-height: 1.4; }
+.vb-pdf-toolbar {
+  display: flex; align-items: center; gap: 6px;
+  padding: 8px 12px;
+  background: var(--paper-2);
+  border-bottom: 1px solid var(--line);
+  font-size: 12px;
+}
+.vb-pdf-zoom {
+  display: inline-flex; align-items: center;
+  background: var(--card); border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 2px;
+}
+.vb-pdf-zoom button {
+  border: 0; background: transparent;
+  width: 24px; height: 24px;
+  border-radius: 6px;
+  cursor: pointer; color: var(--ink-2);
+}
+.vb-pdf-zoom span { padding: 0 8px; font-family: var(--font-mono); font-size: 11px; }
+.vb-pdf-pager-b {
+  margin-left: auto;
+  display: flex; align-items: center; gap: 4px;
+  font-family: var(--font-mono); font-size: 11px; color: var(--ink-3);
+}
+.vb-pdf-pager-b input {
+  width: 36px; padding: 3px 4px; text-align: center;
+  border: 1px solid var(--line); border-radius: 5px;
+  background: var(--card); font: inherit; color: var(--ink);
+}
+
+.vb-pdf-canvas {
+  flex: 1; overflow-y: auto;
+  padding: 16px;
+  background: var(--paper-3);
+  display: flex; flex-direction: column; align-items: center; gap: 12px;
+  min-height: 0;
+}
+.vb-pdf-page {
+  width: 100%; max-width: 360px;
+  aspect-ratio: 1/1.41;
+  background: #fff;
+  box-shadow: var(--shadow-2);
+  border-radius: 4px;
+  padding: 26px 22px;
+  font-family: var(--font-serif);
+  color: #1a1a1a;
+  position: relative;
+}
+[data-theme="dark"] .vb-pdf-page { background: #f1efea; color: #1a1a1a; }
+.vb-pdf-page-num {
+  position: absolute; top: 8px; right: 12px;
+  font-size: 10px; color: #888; font-family: var(--font-mono);
+}
+.vb-pdf-page h3 { margin: 0 0 8px; font-size: 14px; font-weight: 600; }
+.vb-pdf-page p { font-size: 9.5px; line-height: 1.65; margin: 0 0 6px; color: #444; }
+.vb-pdf-fig {
+  height: 80px; margin: 8px 0;
+  background: repeating-linear-gradient(45deg, #e8e4d9, #e8e4d9 6px, #f3efe5 6px, #f3efe5 12px);
+  display: flex; align-items: center; justify-content: center;
+  font-size: 9px; font-family: var(--font-mono); color: #888;
+  border-radius: 3px;
+}
+.vb-pdf-hl {
+  background: linear-gradient(transparent 60%, rgba(217,119,87,0.4) 60%);
+  padding: 0 1px;
+  border-radius: 2px;
+}
+
+/* 灵感库浮动 */
+.vb-notepad-fab {
+  position: absolute;
+  right: 20px; bottom: 90px;
+  width: 280px;
+  background: #fef4d4;
+  border: 1px solid #e8d896;
+  border-radius: 14px;
+  padding: 12px 14px;
+  box-shadow: var(--shadow-2);
+  transform: rotate(-1.2deg);
+  z-index: 5;
+}
+.vb-notepad-head {
+  display: flex; align-items: center; gap: 6px; margin-bottom: 8px;
+  font-size: 12px; font-weight: 600; color: #5a4a2a;
+}
+.vb-notepad-item {
+  font-size: 11.5px; color: #5a4a2a; line-height: 1.55;
+  padding: 6px 0;
+  border-top: 1px dashed rgba(90,74,42,0.25);
+}
+.vb-notepad-item:first-of-type { border-top: 0; }
+.vb-notepad-item-time { font-size: 10px; color: rgba(90,74,42,0.65); margin-bottom: 2px; font-family: var(--font-mono); }
+.vb-notepad-item-title { font-weight: 600; margin-bottom: 2px; }

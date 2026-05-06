@@ -1,5 +1,6 @@
 import os
 import chromadb
+from src.generation.llm_backend import get_llm
 from typing import List, Optional
 from pathlib import Path
 
@@ -10,7 +11,6 @@ from llama_index.core.schema import BaseNode
 # 集成库导入
 from llama_index.vector_stores.chroma import ChromaVectorStore
 from llama_index.embeddings.huggingface import HuggingFaceEmbedding
-from llama_index.llms.ollama import Ollama
 
 # 导入全局配置
 from src.utils.config import GLOBAL_CONFIG
@@ -128,9 +128,20 @@ def build_raptor_index(documents: List[Document]) -> VectorStoreIndex:
 def get_index(documents: Optional[List[Document]] = None, nodes: Optional[List[BaseNode]] = None) -> VectorStoreIndex:
     """通用路由入口：自动根据配置选择构建单层索引还是 RAPTOR 树状索引"""
     if GLOBAL_CONFIG["raptor"]["use_raptor"]:
-        return build_raptor_index(documents)
-    else:
-        return build_vector_index(nodes)
+        try:
+            return build_raptor_index(documents)
+        except ImportError as exc:
+            if nodes:
+                print(
+                    "⚠️ RAPTOR 不可用（缺少 llama-index-packs-raptor），已回退为单层向量索引。\n"
+                    "   安装: pip install llama-index-packs-raptor\n"
+                    "   或关闭: configs/config.yaml → raptor.use_raptor: false"
+                )
+                return build_vector_index(nodes)
+            raise ImportError(
+                "❌ 未安装 RaptorPack，且无 nodes 无法回退。请执行: pip install llama-index-packs-raptor"
+            ) from exc
+    return build_vector_index(nodes)
 
 if __name__ == "__main__":
     from src.ingest.pdf_parser import load_financial_pdfs

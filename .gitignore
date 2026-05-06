@@ -11,7 +11,9 @@ ENV/
 !.env.example
 
 # Project Specific Data & Databases
-# 忽略 ChromaDB 向量数据库目录，防止将数十 GB 的向量数据提交到 Git
+# 核心防御：防止将几十MB的原始金融研报推送到 GitHub
+data/*.pdf
+# 核心防御：防止将数十 GB 的向量数据提交到 Git
 chroma_db/
 # 忽略未来可能生成的知识图谱持久化目录
 kg_store/
@@ -21,6 +23,12 @@ kg_store/
 *.out
 *.err
 human_feedback_log.jsonl
+
+# Python Testing & Notebook Caches
+.pytest_cache/
+.coverage
+htmlcov/
+.ipynb_checkpoints/
 
 # OS generated files
 .DS_Store

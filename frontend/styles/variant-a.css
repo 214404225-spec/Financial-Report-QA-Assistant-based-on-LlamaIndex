@@ -1,0 +1,374 @@
+/* —— 方案 A · 保守版 · 经典三栏 —— */
+.va-app {
+  display: grid;
+  grid-template-columns: 280px 1fr 480px;
+  height: 100%;
+  width: 100%;
+  background: var(--paper);
+  color: var(--ink);
+  font-size: 13px;
+  overflow: hidden;
+}
+
+/* —— 顶栏 —— */
+.va-topbar {
+  grid-column: 1 / -1;
+  height: 52px;
+  display: flex; align-items: center;
+  padding: 0 16px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+  gap: 12px;
+}
+.va-brand { display: flex; align-items: center; gap: 10px; font-weight: 600; }
+.va-logo {
+  width: 26px; height: 26px; border-radius: 7px;
+  background: var(--accent);
+  display: flex; align-items: center; justify-content: center;
+  color: #fff; font-weight: 700; font-size: 14px;
+  font-family: var(--font-serif);
+}
+.va-brand-name { font-size: 14px; }
+.va-brand-sub { font-size: 11px; color: var(--ink-3); margin-left: 6px; }
+.va-topbar-spacer { flex: 1; }
+.va-topbar-actions { display: flex; align-items: center; gap: 6px; }
+
+/* —— 主体行 —— */
+.va-body {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: 280px 1fr 480px;
+  height: calc(100% - 52px);
+  min-height: 0;
+}
+
+/* —— 左栏 —— */
+.va-left {
+  border-right: 1px solid var(--line);
+  display: flex; flex-direction: column;
+  min-height: 0;
+  background: var(--paper-2);
+}
+.va-section { padding: 14px 16px; border-bottom: 1px solid var(--line); }
+.va-section-title {
+  font-size: 11px; font-weight: 600;
+  letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--ink-3); margin: 0 0 10px;
+}
+.va-upload {
+  border: 1.5px dashed var(--line-strong);
+  border-radius: var(--r-md);
+  padding: 14px;
+  text-align: center;
+  background: var(--card);
+  cursor: pointer;
+  transition: all .15s;
+}
+.va-upload:hover { border-color: var(--accent); background: var(--accent-tint); }
+.va-upload-icon { font-size: 18px; margin-bottom: 4px; color: var(--ink-3); }
+.va-upload-text { font-size: 12px; color: var(--ink-2); }
+.va-upload-hint { font-size: 11px; color: var(--ink-4); margin-top: 2px; }
+
+.va-doc-list { flex: 1; overflow-y: auto; padding: 8px 8px 16px; min-height: 0; }
+.va-doc {
+  display: flex; gap: 10px; align-items: flex-start;
+  padding: 10px 10px;
+  border-radius: var(--r-md);
+  cursor: pointer;
+  margin-bottom: 2px;
+  transition: background .12s;
+}
+.va-doc:hover { background: var(--paper-3); }
+.va-doc.selected { background: var(--accent-tint); }
+.va-doc-check {
+  width: 16px; height: 16px; border-radius: 4px;
+  border: 1.5px solid var(--line-strong);
+  background: var(--card);
+  flex: 0 0 auto;
+  margin-top: 2px;
+  position: relative;
+}
+.va-doc.selected .va-doc-check {
+  background: var(--accent); border-color: var(--accent);
+}
+.va-doc.selected .va-doc-check::after {
+  content: ''; position: absolute;
+  inset: 2px; border-right: 2px solid #fff; border-bottom: 2px solid #fff;
+  transform: rotate(45deg) translate(-1px, -1px); width: 4px; height: 8px;
+  left: 5px; top: 1px;
+}
+.va-doc-info { flex: 1; min-width: 0; }
+.va-doc-title {
+  font-size: 12.5px; font-weight: 500;
+  color: var(--ink);
+  line-height: 1.4;
+  display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden;
+}
+.va-doc-meta {
+  font-size: 11px; color: var(--ink-3);
+  margin-top: 4px; display: flex; gap: 8px; align-items: center;
+}
+.va-doc-status { font-size: 10px; color: var(--ok); }
+.va-doc-status.pending { color: var(--warn); }
+
+/* —— 中栏 —— */
+.va-center {
+  display: flex; flex-direction: column;
+  min-height: 0;
+  background: var(--paper);
+}
+.va-engine-bar {
+  display: flex; align-items: center; gap: 10px;
+  padding: 12px 24px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper);
+}
+.va-engine-label { font-size: 11px; color: var(--ink-3); font-weight: 600; letter-spacing: 0.06em; text-transform: uppercase; }
+.va-segment { display: inline-flex; background: var(--paper-3); border-radius: 8px; padding: 3px; }
+.va-segment-btn {
+  padding: 5px 12px; font-size: 12px;
+  border-radius: 6px; border: none; background: transparent;
+  cursor: pointer; color: var(--ink-2); font-weight: 500;
+}
+.va-segment-btn.active { background: var(--card); color: var(--ink); box-shadow: var(--shadow-1); }
+
+.va-summary-block {
+  margin: 16px 24px 0;
+  padding: 16px 18px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg);
+  position: relative;
+}
+.va-summary-block::before {
+  content: ''; position: absolute; left: 0; top: 16px; bottom: 16px;
+  width: 3px; background: var(--accent); border-radius: 0 3px 3px 0;
+}
+.va-summary-head {
+  display: flex; align-items: center; justify-content: space-between;
+  margin-bottom: 8px;
+}
+.va-summary-title {
+  font-family: var(--font-serif);
+  font-size: 15px; font-weight: 600; color: var(--ink);
+}
+.va-summary-text { font-size: 13px; line-height: 1.7; color: var(--ink-2); }
+.va-chips {
+  display: flex; flex-wrap: wrap; gap: 6px;
+  margin-top: 14px;
+}
+.va-chip {
+  padding: 6px 12px;
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 999px;
+  font-size: 12px; color: var(--ink-2);
+  cursor: pointer; transition: all .15s;
+}
+.va-chip:hover { border-color: var(--accent); color: var(--accent-deep); background: var(--accent-tint); }
+
+.va-chat {
+  flex: 1; overflow-y: auto;
+  padding: 20px 24px 12px;
+  min-height: 0;
+}
+.va-msg { margin-bottom: 18px; max-width: 760px; }
+.va-msg.user { margin-left: auto; }
+.va-msg-role {
+  font-size: 11px; color: var(--ink-3); margin-bottom: 6px;
+  font-weight: 600; letter-spacing: 0.04em;
+  display: flex; align-items: center; gap: 6px;
+}
+.va-msg.user .va-msg-role { justify-content: flex-end; }
+.va-msg-avatar {
+  width: 18px; height: 18px; border-radius: 5px;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-size: 10px; font-weight: 700;
+}
+.va-msg-avatar.user { background: var(--paper-3); color: var(--ink-2); }
+.va-msg-avatar.assistant { background: var(--accent); color: #fff; }
+.va-msg-bubble {
+  padding: 14px 16px;
+  border-radius: var(--r-lg);
+  font-size: 13.5px; line-height: 1.7;
+  color: var(--ink);
+  white-space: pre-wrap;
+}
+.va-msg.user .va-msg-bubble {
+  background: var(--accent);
+  color: #fff;
+  border-radius: var(--r-lg) var(--r-lg) 4px var(--r-lg);
+}
+.va-msg.assistant .va-msg-bubble {
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: var(--r-lg) var(--r-lg) var(--r-lg) 4px;
+}
+.va-cite {
+  display: inline-flex; align-items: center; justify-content: center;
+  min-width: 18px; height: 18px;
+  padding: 0 5px;
+  background: var(--accent-tint); color: var(--accent-deep);
+  border-radius: 4px; font-size: 11px; font-weight: 600;
+  vertical-align: 1px; margin: 0 2px; cursor: pointer;
+  font-family: var(--font-mono);
+}
+.va-cite:hover { background: var(--accent-wash); }
+
+.va-msg-cites {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: var(--paper-2);
+  border-radius: var(--r-md);
+  border: 1px solid var(--line);
+}
+.va-msg-cite-row {
+  display: flex; gap: 8px; padding: 6px 0;
+  font-size: 12px; color: var(--ink-2);
+  border-bottom: 1px dashed var(--line);
+}
+.va-msg-cite-row:last-child { border-bottom: 0; }
+.va-msg-cite-num {
+  flex: 0 0 auto;
+  width: 18px; height: 18px;
+  background: var(--accent-tint); color: var(--accent-deep);
+  border-radius: 4px; font-size: 11px; font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono);
+}
+.va-msg-cite-body { flex: 1; }
+.va-msg-cite-meta { color: var(--accent-deep); font-weight: 500; cursor: pointer; }
+.va-msg-cite-meta:hover { text-decoration: underline; }
+.va-msg-cite-snip { color: var(--ink-3); font-size: 11.5px; margin-top: 2px; }
+
+.va-msg-actions {
+  display: flex; gap: 4px; margin-top: 8px;
+  font-size: 11px; color: var(--ink-3);
+}
+.va-msg-action {
+  padding: 4px 8px; border-radius: 6px; cursor: pointer;
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.va-msg-action:hover { background: var(--paper-3); color: var(--ink); }
+
+.va-typing { display: inline-block; }
+.va-typing::after {
+  content: '▍'; color: var(--accent);
+  animation: va-blink 1s steps(2) infinite;
+  margin-left: 1px;
+}
+@keyframes va-blink { 50% { opacity: 0; } }
+
+.va-composer {
+  padding: 12px 24px 16px;
+  border-top: 1px solid var(--line);
+  background: var(--paper);
+}
+.va-composer-box {
+  background: var(--card);
+  border: 1px solid var(--line-2);
+  border-radius: var(--r-lg);
+  padding: 8px 8px 8px 14px;
+  display: flex; align-items: flex-end;
+  transition: border-color .15s, box-shadow .15s;
+}
+.va-composer-box:focus-within { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-tint); }
+.va-composer-input {
+  flex: 1; border: 0; background: transparent; resize: none;
+  font-size: 13px; line-height: 1.6; color: var(--ink);
+  padding: 6px 0; outline: none; max-height: 120px;
+}
+.va-composer-input::placeholder { color: var(--ink-4); }
+.va-composer-actions { display: flex; gap: 4px; align-items: center; }
+.va-send {
+  width: 32px; height: 32px; border-radius: 8px;
+  background: var(--accent); color: #fff;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer; border: 0;
+}
+.va-send:hover { background: var(--accent-deep); }
+.va-composer-hint {
+  display: flex; justify-content: space-between;
+  font-size: 11px; color: var(--ink-4); margin-top: 6px;
+  padding: 0 4px;
+}
+
+/* —— 右栏 PDF —— */
+.va-right {
+  border-left: 1px solid var(--line);
+  display: flex; flex-direction: column;
+  min-height: 0;
+  background: var(--paper-2);
+}
+.va-pdf-bar {
+  height: 44px;
+  padding: 0 14px;
+  display: flex; align-items: center; gap: 10px;
+  border-bottom: 1px solid var(--line);
+  background: var(--paper-2);
+}
+.va-pdf-title {
+  font-size: 12.5px; font-weight: 500; color: var(--ink);
+  flex: 1; min-width: 0;
+  overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+}
+.va-pdf-pager {
+  display: inline-flex; align-items: center; gap: 4px;
+  font-size: 12px; color: var(--ink-2);
+}
+.va-pdf-pager input {
+  width: 38px; padding: 3px 6px; text-align: center;
+  border: 1px solid var(--line-2); border-radius: 5px;
+  background: var(--card); font-family: var(--font-mono); font-size: 12px;
+}
+.va-pdf-canvas {
+  flex: 1; padding: 16px;
+  overflow-y: auto;
+  background: var(--paper-3);
+  display: flex; flex-direction: column; align-items: center; gap: 14px;
+  min-height: 0;
+}
+.va-pdf-page {
+  width: 100%; max-width: 380px;
+  aspect-ratio: 1 / 1.41;
+  background: #fff;
+  box-shadow: var(--shadow-2);
+  border-radius: 4px;
+  position: relative;
+  display: flex; flex-direction: column;
+  padding: 28px 24px;
+  font-family: var(--font-serif);
+  color: #333;
+}
+[data-theme="dark"] .va-pdf-page { background: #f3f1ec; }
+.va-pdf-page-num {
+  position: absolute; top: 8px; right: 12px;
+  font-size: 10px; color: #999; font-family: var(--font-mono);
+}
+.va-pdf-page h3 { font-size: 14px; margin: 0 0 8px; color: #1a1a1a; font-weight: 600; }
+.va-pdf-page p { font-size: 9.5px; line-height: 1.65; margin: 0 0 6px; color: #444; }
+.va-pdf-highlight {
+  background: linear-gradient(transparent 60%, rgba(217,119,87,0.35) 60%);
+  padding: 0 1px;
+}
+.va-pdf-fig {
+  margin: 8px 0;
+  height: 80px;
+  background: repeating-linear-gradient(45deg, #e8e4d9, #e8e4d9 6px, #efece4 6px, #efece4 12px);
+  border-radius: 3px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-mono); font-size: 9px; color: #888;
+}
+
+/* —— Tweaks 面板（深浅切换） —— */
+.va-theme-toggle {
+  display: inline-flex; background: var(--paper-3);
+  border-radius: 999px; padding: 3px;
+}
+.va-theme-toggle button {
+  border: 0; background: transparent;
+  padding: 5px 10px; border-radius: 999px;
+  font-size: 11px; cursor: pointer; color: var(--ink-3);
+  display: inline-flex; align-items: center; gap: 4px;
+}
+.va-theme-toggle button.active { background: var(--card); color: var(--ink); box-shadow: var(--shadow-1); }

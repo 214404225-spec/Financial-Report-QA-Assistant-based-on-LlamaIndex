@@ -12,8 +12,8 @@
 
 ---
 
-## 2. 项目核心指导原则 (The 4 Golden Rules)
-为防止架构跑偏或代码不可运行，所有开发工作必须遵守以下 4 条铁律：
+## 2. 项目核心指导原则 (The 5 Golden Rules)
+为防止架构跑偏或代码不可运行，所有开发工作必须遵守以下 5 条铁律：
 
 1. **绝对的本地化与隐私 (Local-First Execution)**：
    - 严禁在代码中引入任何依赖 OpenAI、Anthropic 等云端 API 的逻辑。
@@ -41,7 +41,15 @@
 | `00_course_execution_plan.md` | 总体实施计划、双阶段开发路线图、软硬件配置、架构图 (Mermaid)。 | [必读] 了解我们为什么要这么做，以及我们目前处于 Phase 1 还是 Phase 2。 |
 | `01_architecture_data_flow.md` | Ingest, Retrieval, Generation 模块的具体接口定义、参数设计和 Prompt 反幻觉模板。 | [必读] 当你需要编写具体的 Python 代码（如解析 PDF 或组合多路召回）时。 |
 | `02_evaluation_metrics.md` | RAGAS 本地评估系统的搭建指南、20 题标准化测试用例、性能分析记录表。 | 当你需要编写评估脚本 (`ragas_eval.py`) 或产出实验数据报告时。 |
-| `archive/` | 早期被废弃的产品 PRD 和旧版架构草案。 | [忽略] 仅作为历史参考，其内容已过期，不要根据里面的内容写代码。 |
+| `03_task_tracking.md` | 阶段任务勾选与里程碑。 | 对齐小组进度与「当前该做什么」。 |
+| `04_technical_debt_log.md` | 已知技术债与重构计划。 | 排期优化或重构前阅读。 |
+| `05_progress_report_guide.md` | 中期报告、消融实验与评估操作规范。 | 复现实验与写进展报告时。 |
+| `06_experiment_report_phase1_vs_phase2a.md` | Phase1 vs Phase2A 实验记录。 | 对照实验结论与数据。 |
+| `07_frontend_backend_api.md` | Gradio 集成面、事件绑定与下游模块索引。 | 前后端对接、自定义调用 Gradio API 时。 |
+| `08_frontend_backend_acceptance_checklist.md` | UI 与 handler 逐项验收清单（含 AI 协助流程）。 | 联调与发布前自检。 |
+| `09_documentation_consistency.md` | 文档一致性约定与审计结论。 | 发现文档与代码冲突时优先查阅。 |
+| `10_frontend_spec_for_integration.md` | 前端功能清单、控件变量名、Python 逻辑接口名；供外部 UI 设计与 Gradio 接入。 | 让其他 AI/设计师重做界面或对接时优先阅读。 |
+| `archive/` | 早期 PRD、旧版技术方案与实施计划草案。 | **[仅供参考]** 路径、文件名或能力与当前仓库可能不一致；**实现以 `01`/`代码`/`config.yaml` 为准**。 |
 
 ---
 

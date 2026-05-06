@@ -1,5 +1,4 @@
 from typing import Optional
-from llama_index.llms.ollama import Ollama
 from llama_index.core.chat_engine import CondensePlusContextChatEngine
 from llama_index.core.memory import ChatMemoryBuffer
 from llama_index.core import PromptTemplate
@@ -8,6 +7,7 @@ from llama_index.core.retrievers import BaseRetriever
 # 导入全局配置
 from src.utils.config import GLOBAL_CONFIG
 from src.retrieval.retriever import get_node_postprocessors
+from src.generation.llm_backend import init_llm
 
 # ==========================================
 # 核心 Prompt 设计 (The Prompts)
@@ -43,21 +43,11 @@ CONDENSE_PROMPT_TEMPLATE = (
 def get_chat_engine(retriever: BaseRetriever) -> CondensePlusContextChatEngine:
     """
     初始化带有短期记忆的多轮对话引擎。
-    采用 Phase 1 的配置 (Qwen2.5-7B) 进行推理。
+    采用全局配置的 LLM (已切换至 DeepSeek API)。
     """
-    # 1. 初始化本地大模型 (Ollama)
-    llm_model = GLOBAL_CONFIG["llm"]["weak_model"] # Phase 1 使用基础模型生成回答
-    base_url = GLOBAL_CONFIG["llm"]["ollama_base_url"]
-    temperature = GLOBAL_CONFIG["llm"]["temperature"]
-    
-    print(f"🧠 [Generation] 初始化本地推理核心: {llm_model} (Temp: {temperature})...")
-    
-    llm = Ollama(
-        model=llm_model, 
-        base_url=base_url,
-        temperature=temperature, 
-        request_timeout=300.0  # 本地推理可能较慢，给足超时时间
-    )
+    # 1. 初始化大模型后端
+    print(f"🧠 [Generation] 初始化推理核心后端 (DeepSeek API)...")
+    llm = init_llm()
     
     # 2. 初始化短期记忆池 (ChatMemoryBuffer)
     # Token 限制防止上下文爆炸，超出后自动遗忘最老的对话

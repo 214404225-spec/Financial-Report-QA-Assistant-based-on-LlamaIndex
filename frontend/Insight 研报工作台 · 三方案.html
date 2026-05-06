@@ -1,0 +1,199 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Insight · 研报分析工作台 · 三方案探索</title>
+<link rel="stylesheet" href="styles/tokens.css" />
+<link rel="stylesheet" href="styles/variant-a.css" />
+<link rel="stylesheet" href="styles/variant-b.css" />
+<link rel="stylesheet" href="styles/variant-c.css" />
+<style>
+  html, body, #root { height: 100%; }
+  body { background: #f0eee9; }
+  [data-theme="dark"] body { background: #181714; }
+
+  /* 隔离每个 artboard：让其内部的 100% 高度生效 */
+  .insight-frame {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    background: var(--paper);
+    color: var(--ink);
+    border-radius: 6px;
+    isolation: isolate;
+  }
+
+  /* design canvas 内的 readme 卡片 */
+  .intro-card {
+    background: #fbfaf6;
+    border: 1px solid #e0dccf;
+    border-radius: 14px;
+    padding: 28px 32px;
+    width: 720px;
+    font-family: "PingFang SC", "Helvetica Neue", system-ui, sans-serif;
+    color: #29261b;
+    box-shadow: 0 1px 0 rgba(0,0,0,0.04), 0 6px 18px rgba(0,0,0,0.04);
+  }
+  .intro-card h1 {
+    font-family: "Source Han Serif SC", "Songti SC", Georgia, serif;
+    font-size: 32px; font-weight: 600; margin: 0 0 6px;
+    letter-spacing: -0.01em;
+  }
+  .intro-card .eyebrow {
+    font-size: 11px; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: #c25e3e; margin-bottom: 6px;
+  }
+  .intro-card p { font-size: 13.5px; line-height: 1.75; color: #4a463c; margin: 8px 0; }
+  .intro-card .system {
+    margin-top: 18px; padding-top: 16px;
+    border-top: 1px solid #e0dccf;
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px;
+  }
+  .intro-card .sys-row { font-size: 12px; }
+  .intro-card .sys-row b { display: block; color: #29261b; font-weight: 600; margin-bottom: 4px; font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: #6b6760; }
+  .intro-card .sys-row .v { color: #4a463c; line-height: 1.5; }
+  .intro-card .swatches { display: flex; gap: 6px; margin-top: 6px; }
+  .intro-card .sw { width: 22px; height: 22px; border-radius: 6px; border: 1px solid rgba(0,0,0,0.06); }
+</style>
+
+<!-- React + Babel -->
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" integrity="sha384-hD6/rw4ppMLGNu3tX5cjIb+uRZ7UkRJ6BPkLpg4hAu/6onKUg4lLsHAs9EBPT82L" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" integrity="sha384-u6aeetuaXnQ38mYT8rp6sbXaQe3NL9t+IBXmnYxwkUI2Hw4bsp2Wvmx4yRQF1uAm" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" integrity="sha384-m08KidiNqLdpJqLq95G/LEi8Qvjl/xUYll3QILypMoQ65QorJ9Lvtp2RXYGBFj1y" crossorigin="anonymous"></script>
+</head>
+<body>
+<div id="root"></div>
+
+<!-- 数据 -->
+<script src="data/mock.js"></script>
+<script src="data/api.js"></script>
+
+<!-- 设计画布 + Tweaks -->
+<script type="text/babel" src="design-canvas.jsx"></script>
+<script type="text/babel" src="tweaks-panel.jsx"></script>
+
+<!-- 三个方案 -->
+<script type="text/babel" src="variants/variant-a.jsx"></script>
+<script type="text/babel" src="variants/variant-b.jsx"></script>
+<script type="text/babel" src="variants/variant-c-charts.jsx"></script>
+<script type="text/babel" src="variants/variant-c.jsx"></script>
+
+<script type="text/babel">
+const { useState, useEffect } = React;
+
+const TWEAK_DEFAULS = /*EDITMODE-BEGIN*/{
+  "theme": "light"
+}/*EDITMODE-END*/;
+
+function Intro() {
+  return (
+    <div className="intro-card">
+      <div className="eyebrow">Insight · 设计探索 · v1</div>
+      <h1>研报工作台 · 三个方向</h1>
+      <p>
+        以「来源驱动 + 深度对话 + 原文追溯」为核心工作流，配色继承 Claude 暖橙 + 米白纸感，
+        三栏布局与 mock 金融研报数据贯穿三个方案。所有方案共用同一套 Token：
+        <code style={{ background: '#f3efe5', padding: '2px 6px', borderRadius: 4, fontSize: 12 }}>styles/tokens.css</code>。
+      </p>
+      <div className="system">
+        <div className="sys-row">
+          <b>配色（暖橙纸感）</b>
+          <div className="swatches">
+            <div className="sw" style={{ background: '#f6f4ef' }} />
+            <div className="sw" style={{ background: '#fbfaf6' }} />
+            <div className="sw" style={{ background: '#d97757' }} />
+            <div className="sw" style={{ background: '#29261b' }} />
+            <div className="sw" style={{ background: '#6b6760' }} />
+          </div>
+          <div className="v" style={{ marginTop: 6 }}>Claude 标志橙 + 5 阶米白墨灰</div>
+        </div>
+        <div className="sys-row">
+          <b>字体配对</b>
+          <div className="v">PingFang SC（界面）<br />Source Han Serif（标题/引文）<br />JetBrains Mono（页码/数字）</div>
+        </div>
+        <div className="sys-row">
+          <b>三个方向差异</b>
+          <div className="v">
+            A · 保守：传统三栏 + 温和卡片<br />
+            B · 平衡：来源卡片化 + 引用气泡<br />
+            C · 大胆：杂志专栏 + 行间脚注
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function App() {
+  const [tweaks, setTweaks] = useState(TWEAK_DEFAULS);
+
+  useEffect(() => {
+    document.documentElement.dataset.theme = tweaks.theme;
+  }, [tweaks.theme]);
+
+  // Tweaks panel wiring
+  useEffect(() => {
+    const handler = (e) => {
+      if (e.data?.type === '__activate_edit_mode') setVisible(true);
+      if (e.data?.type === '__deactivate_edit_mode') setVisible(false);
+    };
+    window.addEventListener('message', handler);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', handler);
+  }, []);
+  const [visible, setVisible] = useState(false);
+
+  const updateTheme = (v) => {
+    setTweaks(t => ({ ...t, theme: v }));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits: { theme: v } }, '*');
+  };
+
+  return (
+    <>
+      <DesignCanvas>
+        <DCSection id="intro" title="Insight · 研报分析工作台" subtitle="三个方向 · Claude 暖橙 + 米白纸感">
+          <DCArtboard id="readme" label="设计说明" width={760} height={360}>
+            <Intro />
+          </DCArtboard>
+        </DCSection>
+
+        <DCSection id="variants" title="三个方案" subtitle="保守 · 平衡 · 大胆">
+          <DCArtboard id="va" label="A · 保守版 · 经典三栏" width={1440} height={900}>
+            <div className="insight-frame"><VariantA /></div>
+          </DCArtboard>
+          <DCArtboard id="vb" label="B · 平衡版 · 卡片化 + 内联引用" width={1440} height={900}>
+            <div className="insight-frame"><VariantB /></div>
+          </DCArtboard>
+          <DCArtboard id="vc" label="C · 大胆版 · 杂志专栏 + 行间脚注" width={1440} height={900}>
+            <div className="insight-frame"><VariantC /></div>
+          </DCArtboard>
+        </DCSection>
+      </DesignCanvas>
+
+      {visible && (
+        <TweaksPanel onClose={() => {
+          setVisible(false);
+          window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+        }}>
+          <TweakSection title="主题">
+            <TweakRadio
+              label="明暗模式"
+              value={tweaks.theme}
+              onChange={updateTheme}
+              options={[
+                { value: 'light', label: '明亮' },
+                { value: 'dark', label: '暗色' },
+              ]}
+            />
+          </TweakSection>
+        </TweaksPanel>
+      )}
+    </>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+</body>
+</html>
